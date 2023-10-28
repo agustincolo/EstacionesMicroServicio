@@ -24,6 +24,7 @@ public class Estacion {
     private LocalDate FECHA_HORA_CREACION;
     @Basic
     private float LATITUD;
+    @Basic
     private float LONGITUD;
 
     public float calcularDistancia(float longitud, float latitud){
