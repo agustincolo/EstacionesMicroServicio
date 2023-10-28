@@ -1,7 +1,7 @@
 package TP.EstacionesMicroServicio.controller;
 
 
-import TP.EstacionesMicroServicio.entity.Estaciones;
+import TP.EstacionesMicroServicio.entity.Estacion;
 import TP.EstacionesMicroServicio.service.EstacionesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,43 +17,54 @@ public class EstacionesController {
   private EstacionesService service;
 
   @GetMapping("/estaciones")
-  public List<Estaciones> findAllArtist(){
+  public List<Estacion> findAllArtist() {
     return service.findAll();
   }
 
   @GetMapping("/estaciones/{id}")
-  public Optional<Estaciones> findOneEstacion(@PathVariable int id){
+  public Optional<Estacion> findOneEstacion(@PathVariable int id) {
     return service.findOne(id);
   }
 
   @PostMapping("/api/estaciones")
-  public ResponseEntity<?> addArtist(@RequestBody Estaciones estaciones){
-    try{
-      service.create(estaciones);
-      return ResponseEntity.status(201).body(estaciones);
-    }catch (Exception e){
+  public ResponseEntity<?> addEstacion(@RequestBody Estacion estacion) {
+    try {
+      service.create(estacion);
+      return ResponseEntity.status(201).body(estacion);
+    } catch (Exception e) {
       return ResponseEntity.status(400).body(e.getMessage());
     }
   }
 
   @DeleteMapping("/estaciones/{id}")
-  public ResponseEntity<?> deleteArtist(@PathVariable int id){
+  public ResponseEntity<?> deleteEstacion(@PathVariable int id) {
     try {
       service.deleteEstacion(id);
       return ResponseEntity.status(204).build();
-    }catch (Exception e){
+    } catch (Exception e) {
       return ResponseEntity.status(400).body("No se encontro el id");
     }
   }
 
   @PutMapping("/api/estaciones")
-  public ResponseEntity<?> putArtist(@RequestBody Estaciones estaciones){
+  public ResponseEntity<?> putEstacion(@RequestParam Estacion estacion) {
     try {
-      service.modificarEstacion(estaciones);
+      service.modificarEstacion(estacion);
       return ResponseEntity.status(201).build();
-    }catch (Exception e){
+    } catch (Exception e) {
       return ResponseEntity.status(400).body("No se logro hacer el put");
     }
+  }
+
+  @GetMapping("/api/estaciones")
+  public ResponseEntity<Estacion> getEstacionCercana(@RequestParam(value = "longitud", required = false) float longitud,
+                                                     @RequestParam(value = "latitud", required = false) float latitud) {
+  try{
+    Estacion estacion = service.getByCercania(longitud, latitud);
+    return ResponseEntity.ok(estacion);
+  }catch (Exception e){
+    return ResponseEntity.status(400).build();
+  }
   }
 
 }
